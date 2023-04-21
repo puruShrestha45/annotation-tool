@@ -1,0 +1,40 @@
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" href="index.css">
+
+</head>
+
+<body>
+  <br>
+  <button id="selectFolderButton">Select folder</button>
+  <div id="imageViewer">
+    <img id="image" src="">
+    <div class="buttons">
+
+      <button id="prevButton">Prev</button>
+      <button id="nextButton">Next</button>
+      <button id="deleteButton">Delete</button>
+      <div class="lang-toggle">
+        <span class="lang-title">Eng</span>
+        <label class="switch">
+          <input type="checkbox" id="toggleNepaliSwitch">
+          <span class="slider round"></span>
+        </label>
+        <span class="lang-title">Nep</span>
+      </div>
+    </div>
+  </div>
+  <textarea id="transliterateTextarea" style="width:600px;height:200px"></textarea>
+  <div id="suggestions"></div>
+  <div class="current-index"></div>
+  <p>Note : Press SpaceBar after typing one word for English to Nepali Translation. If translation
+    is wrong click the word to select from list of Suggestions.</p>
+  <button id="saveButton">Save</button>
+  <script src="https://cdn.jsdelivr.net/npm/danfojs@1.1.2/lib/bundle.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="index.js"> </script>
+</body>
+
+</html>
