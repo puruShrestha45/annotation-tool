@@ -119,3 +119,19 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
 }
+
+figure {
+  position: relative;
+  margin: 0;
+}
+
+figcaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  font-size: 14px;
+  text-align: center;
+}
