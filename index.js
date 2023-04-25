@@ -29,9 +29,14 @@ const selectSuggestedWord = (text, index) => {
 };
 
 const updateImage = (saveCrop = false) => {
+  const imagePath = imgDir + "/" + csvData[currentImageIndex].image.replaceAll("#", "%23");
   if (csvData !== null) {
     if (currentImageIndex >= 0 && currentImageIndex <= csvData.length - 1) {
-      console.log(cropper);
+
+      if(!checkFileExists(imagePath)){
+        
+      }
+
       if (cropper !== null) {
         if (saveCrop) {
           const cropData = cropper.getValue();
@@ -54,8 +59,8 @@ const updateImage = (saveCrop = false) => {
       }
       myAPI.clearCache();
 
-      image.src =
-        imgDir + "/" + csvData[currentImageIndex].image.replaceAll("#", "%23");
+      image.src = imagePath
+        
       imageCaption.textContent = csvData[currentImageIndex].image;
       cropper = new Croppr(image, {});
       inputField.value = csvData[currentImageIndex].text;
@@ -71,7 +76,6 @@ const updateRow = () => {
   if (csvData !== null) {
     const text = inputField.value;
     csvData[currentImageIndex].text = text.trim();
-    csvData[currentImageIndex].isNepali = true;
   }
 };
 

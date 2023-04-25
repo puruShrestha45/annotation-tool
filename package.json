@@ -1,33 +1,39 @@
 {
   "name": "annotation",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a simple annotation tool for images",
   "main": "main.js",
   "devDependencies": {
+    "@electron-forge/cli": "^6.1.1",
+    "@electron-forge/maker-deb": "^6.1.1",
+    "@electron-forge/maker-rpm": "^6.1.1",
+    "@electron-forge/maker-squirrel": "^6.1.1",
+    "@electron-forge/maker-zip": "^6.1.1",
     "electron": "^23.1.4",
     "electron-builder": "^23.6.0",
     "electron-reload": "^2.0.0-alpha.1",
-    "electron-reloader": "^1.2.3"
+    "electron-reloader": "^1.2.3",
+    "electron-squirrel-startup": "^1.0.0"
   },
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist:windows": "electron-builder --windows",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "author": "",
   "license": "ISC",
+  "build": {
+    "appId": "com.aaronlenoir.gnucash-reporter",
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    }
+  },
   "dependencies": {
     "danfojs-node": "^1.1.2",
-    "node-fetch": "^3.3.1",
     "sharp": "^0.32.0",
     "url": "^0.11.0"
-  },
-  "build": {
-    "appId": "com.example.app",
-    "asar": true,
-    "directories": {
-      "output": "build"
-    },
-    "win": {
-      "target": "nsis"
-    }
   }
 }
