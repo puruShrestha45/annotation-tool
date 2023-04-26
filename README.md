@@ -32,4 +32,4 @@ To use the tool, follow these steps:
 1. Click on the "Select Folder" button to choose the folder containing the images to annotate.
 2. Use the keyboard shortcuts to navigate through the images and annotate them.
 3. Click on the "Save" button to save the annotations.
-4. The annotated data will be stored in CSV format or a database.
+4. The annotated data will be stored in CSV format
