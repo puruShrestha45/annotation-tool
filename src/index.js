@@ -66,7 +66,7 @@ const updateImage = (saveCrop = false) => {
       toggleNepaliSwitch.checked = csvData[currentImageIndex].isNepali;
       nepaliMode = csvData[currentImageIndex].isNepali;
 
-      currentIndex.textContent = currentImageIndex + 1;
+      // currentIndex.textContent = currentImageIndex + 1;
     }
   }
 };
