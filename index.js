@@ -29,12 +29,11 @@ const selectSuggestedWord = (text, index) => {
 };
 
 const updateImage = (saveCrop = false) => {
-  const imagePath = imgDir + "/" + csvData[currentImageIndex].image.replaceAll("#", "%23");
+  const imagePath =
+    imgDir + "/" + csvData[currentImageIndex].image.replaceAll("#", "%23");
   if (csvData !== null) {
     if (currentImageIndex >= 0 && currentImageIndex <= csvData.length - 1) {
-
-      if(!checkFileExists(imagePath)){
-        
+      if (!myAPI.checkFileExists(imagePath)) {
       }
 
       if (cropper !== null) {
@@ -59,8 +58,8 @@ const updateImage = (saveCrop = false) => {
       }
       myAPI.clearCache();
 
-      image.src = imagePath
-        
+      image.src = imagePath;
+
       imageCaption.textContent = csvData[currentImageIndex].image;
       cropper = new Croppr(image, {});
       inputField.value = csvData[currentImageIndex].text;
@@ -133,7 +132,13 @@ inputField.addEventListener("input", async (event) => {
         let suggestionButton = document.createElement("button");
         suggestionButton.textContent = suggestion;
         suggestionButton.addEventListener("click", () => {
-          selectSuggestedWord(wordList, suggestion, true);
+          wordList[wordIndex] = suggestion;
+          const finalText = wordList.join(" ") + " ";
+          const selectedWordIndex =
+          finalText.indexOf(suggestedWord) + suggestedWord.length + 1;
+          selectSuggestedWord(finalText, selectedWordIndex);
+          suggestionDiv.innerHTML = "";
+          // selectSuggestedWord(wordList, suggestion, true);
         });
         suggestionDiv.appendChild(suggestionButton);
       });
