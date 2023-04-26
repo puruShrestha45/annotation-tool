@@ -1,7 +1,7 @@
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  padding: 0;
+  padding: 20px;
 }
 form {
   margin: 20px;
@@ -118,4 +118,20 @@ input:checked + .slider:before {
 .buttons{
   display: flex;
   align-items: center;
+}
+
+figure {
+  position: relative;
+  margin: 0;
+}
+
+figcaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  font-size: 14px;
+  text-align: center;
 }
