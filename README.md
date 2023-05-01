@@ -33,3 +33,5 @@ To use the tool, follow these steps:
 2. Use the keyboard shortcuts to navigate through the images and annotate them.
 3. Click on the "Save" button to save the annotations.
 4. The annotated data will be stored in CSV format
+
+## Note this app is built and tested on ubuntu. It has not been tested on windows so it is expected to have some bugs in windows specially with file paths
