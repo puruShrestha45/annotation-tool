@@ -31,6 +31,10 @@ function createWindow() {
       return;
     } else {
       folderPath = filePaths[0];
+
+      const folderName = path.basename(folderPath)
+      const csvPath = path.join(folderPath, folderName+'.csv')
+
       // get list of images in the directory
       let imageList = await readdir(folderPath);
 
@@ -38,7 +42,7 @@ function createWindow() {
         (file) => file.endsWith(".jpg") || file.endsWith(".png")
       );
 
-      return { folderPath, imageList };
+      return { folderPath, folderName, imageList, csvPath };
     }
   });
 
@@ -49,10 +53,13 @@ function createWindow() {
   ipcMain.handle("saveCSV", async (event, csvPath, csvData) => {
     let df = new dfd.DataFrame(csvData);
     dfd.toCSV(df, { filePath: csvPath });
+    console.log("saved to ", csvPath);
   });
 
-  ipcMain.handle("deleteImage", async (event, imgPath) => {
-    backupImage(imgPath);
+  ipcMain.handle("deleteImage", async (event, imageDir, imageName) => {
+    const imgPath = path.join(imageDir, imageName)
+    console.log(imgPath);
+    backupImage(imageDir, imageName);
     unlink(imgPath, (err) => {
       if (err) {
         console.log(err);
@@ -61,11 +68,13 @@ function createWindow() {
     });
   });
 
-  ipcMain.handle("saveCrop", async (event, imgPath, cropData) => {
-    const image = sharp(imgPath);
+  ipcMain.handle("saveCrop", async (event, imageDir, imageName, cropData) => {
+    const imagePath = path.join(imageDir, imageName)
+    const image = sharp(imagePath);
+
 
     // save original image as a backup. store it in backup folder
-    backupImage(imgPath);
+    backupImage(imageDir, imageName);
 
     image
       .extract({
@@ -76,7 +85,7 @@ function createWindow() {
       })
       .toBuffer()
       .then(function (data) {
-        fs.writeFileSync(imgPath, data);
+        fs.writeFileSync(imagePath, data);
         console.log("Image cropped and saved");
       })
       .catch(function (err) {
@@ -109,9 +118,9 @@ app.on("window-all-closed", () => {
   }
 });
 
-const backupImage = (imgPath) => {
-  let fileName = imgPath.split("/").pop();
-  const backupFolder = imgPath.split("/").slice(0, -1).join("/") + "/backup/";
+const backupImage = (imgDir, imageName) => {
+  const imgPath = path.join(imgDir, imageName)
+  const backupFolder = path.join(imgDir, "backup")
 
   if (!fs.existsSync(imgPath)) {
     console.log("file does not exist");
@@ -122,8 +131,8 @@ const backupImage = (imgPath) => {
     fs.mkdirSync(backupFolder);
   }
 
-  if (!fs.existsSync(backupFolder + fileName)) {
-    fs.copyFile(imgPath, backupFolder + fileName, function (err) {
+  if (!fs.existsSync(path.join(backupFolder, imageName))) {
+    fs.copyFile(imgPath, path.join(backupFolder, imageName), function (err) {
       if (err) {
         throw err;
       }

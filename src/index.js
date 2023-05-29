@@ -3,20 +3,21 @@ const suggestionDiv = document.getElementById("suggestions");
 const selectFolderButton = document.getElementById("selectFolderButton");
 const imageViewer = document.getElementById("imageViewer");
 const image = document.getElementById("image");
-const imageCaption = document.getElementById("imageCaption");
+const imageCaption = document.getElementById("image-caption");
 const prevButton = document.getElementById("prevButton");
 const nextButton = document.getElementById("nextButton");
 const deleteButton = document.getElementById("deleteButton");
 const saveButton = document.getElementById("saveButton");
 const toggleNepaliSwitch = document.getElementById("toggleNepaliSwitch");
 const currentIndex = document.querySelector(".current-index");
+const folderNameSpan = document.querySelector(".folder-name");
 
 let suggestions = [];
 let suggestedWord = "";
 let images = [];
 let imgDir = "";
 let currentImageIndex = 0;
-let csvPath = "";
+let pathToCsv = "";
 let csvData = null;
 let nepaliMode = true;
 let cropper = null;
@@ -49,7 +50,7 @@ const updateImage = (saveCrop = false) => {
             console.log("crop data changed");
 
             myAPI.saveCrop(
-              imgDir + "/" + csvData[currentImageIndex - 1].image,
+              imgDir, csvData[currentImageIndex - 1].image,
               cropData
             );
           }
@@ -66,7 +67,8 @@ const updateImage = (saveCrop = false) => {
       toggleNepaliSwitch.checked = csvData[currentImageIndex].isNepali;
       nepaliMode = csvData[currentImageIndex].isNepali;
 
-      // currentIndex.textContent = currentImageIndex + 1;
+      window.myAPI.saveCSV(pathToCsv, csvData);
+
     }
   }
 };
@@ -160,14 +162,15 @@ selectFolderButton.addEventListener("click", async (e) => {
   console.log("selectFolderButton clicked");
   window.myAPI
     .selectFolder()
-    .then(({ folderPath, imageList }) => {
-      console.log("folder selected");
+    .then(({ folderPath, folderName, imageList, csvPath }) => {
+
       imgDir = folderPath;
-      const csvName = folderPath.split("/").pop();
-      csvPath = imgDir + `/${csvName}.csv`;
+      pathToCsv = csvPath
+
       images = imageList;
-      // console.log(folderPath, imageList);
-      d3.csv(csvPath)
+      folderNameSpan.textContent =' Folder: ' + folderName;
+
+      d3.csv(pathToCsv)
         .then((csv) => {
           console.log("csv found");
           csvData = csv;
@@ -205,12 +208,14 @@ nextButton.addEventListener("click", async (e) => {
 
 saveButton.addEventListener("click", async (e) => {
   updateRow();
-  window.myAPI.saveCSV(csvPath, csvData);
+  window.myAPI.saveCSV(pathToCsv, csvData);
 });
 
 deleteButton.addEventListener("click", async (e) => {
+  console.log(imgDir);
+  
   window.myAPI
-    .deleteImage(imgDir + "/" + csvData[currentImageIndex].image)
+    .deleteImage(imgDir, csvData[currentImageIndex].image)
     .then(() => {
       csvData.splice(currentImageIndex, 1);
       if (currentImageIndex >= csvData.length) {

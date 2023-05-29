@@ -28,6 +28,7 @@ button {
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
+  width: 150px;
 }
 button:hover {
   background-color: #ddd;
@@ -134,4 +135,22 @@ figcaption {
   padding: 5px;
   font-size: 14px;
   text-align: center;
+}
+
+.image-container{
+  height: 80px;
+  display:flex;
+  flex-direction: column;
+}
+
+#image-caption {
+  margin-top: 10px;
+}
+
+.header-container{
+  display: flex;
+  flex-direction: column;
+}
+.folder-name{
+  padding: 5px 10px;
 }
