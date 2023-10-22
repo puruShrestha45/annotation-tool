@@ -1,39 +1,28 @@
 {
-  "name": "annotation",
+  "name": "annotation-tool",
   "version": "1.0.0",
-  "description": "This is a simple annotation tool for images",
+  "description": "This is a simple annotation tool to annotate handwritten text in images.",
   "main": "main.js",
-  "devDependencies": {
-    "@electron-forge/cli": "^6.1.1",
-    "@electron-forge/maker-deb": "^6.1.1",
-    "@electron-forge/maker-rpm": "^6.1.1",
-    "@electron-forge/maker-squirrel": "^6.1.1",
-    "@electron-forge/maker-zip": "^6.1.1",
-    "electron": "^23.1.4",
-    "electron-builder": "^23.6.0",
-    "electron-reload": "^2.0.0-alpha.1",
-    "electron-reloader": "^1.2.3",
-    "electron-squirrel-startup": "^1.0.0"
-  },
   "scripts": {
     "start": "electron .",
-    "dist:windows": "electron-builder --windows",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "build": "electron-builder"
   },
-  "author": "",
-  "license": "ISC",
-  "build": {
-    "appId": "com.aaronlenoir.gnucash-reporter",
-    "win": {
-      "target": [
-        "nsis"
-      ]
-    }
-  },
+  "author": "Your Name",
+  "license": "MIT",
   "dependencies": {
-    "danfojs-node": "^1.1.2",
-    "sharp": "^0.32.0",
-    "url": "^0.11.0"
+    "electron-reloader": "^1.2.3",
+    "papaparse": "^5.4.1",
+    "sharp": "^0.32.5",
+    "url": "^0.11.1"
+  },
+  "devDependencies": {
+    "electron": "^16.0.0",
+    "electron-builder": "^23.6.0"
+  },
+  "build": {
+    "appId": "your.app.id",
+    "win": {
+      "target": "NSIS"
+    }
   }
 }

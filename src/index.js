@@ -1,7 +1,7 @@
 const inputField = document.getElementById("transliterateTextarea");
 const suggestionDiv = document.getElementById("suggestions");
 const selectFolderButton = document.getElementById("selectFolderButton");
-const imageViewer = document.getElementById("imageViewer");
+const imageContainer = document.querySelector(".image-container");
 const image = document.getElementById("image");
 const imageCaption = document.getElementById("image-caption");
 const prevButton = document.getElementById("prevButton");
@@ -9,18 +9,20 @@ const nextButton = document.getElementById("nextButton");
 const deleteButton = document.getElementById("deleteButton");
 const saveButton = document.getElementById("saveButton");
 const toggleNepaliSwitch = document.getElementById("toggleNepaliSwitch");
-const currentIndex = document.querySelector(".current-index");
+const currentIndex = document.querySelector("#current-index");
 const folderNameSpan = document.querySelector(".folder-name");
+const isInvalidCheckbox = document.querySelector("#invalid-image");
 
 let suggestions = [];
 let suggestedWord = "";
 let images = [];
 let imgDir = "";
+let formId = "";
 let currentImageIndex = 0;
 let pathToCsv = "";
 let csvData = null;
-let nepaliMode = true;
-let cropper = null;
+let nepaliMode = false;
+let isInvalid = false;
 
 const selectSuggestedWord = (text, index) => {
   inputField.value = text;
@@ -29,7 +31,7 @@ const selectSuggestedWord = (text, index) => {
   inputField.setSelectionRange(index, index);
 };
 
-const updateImage = (saveCrop = false) => {
+const updateImage = () => {
   const imagePath =
     imgDir + "/" + csvData[currentImageIndex].image.replaceAll("#", "%23");
   if (csvData !== null) {
@@ -37,35 +39,17 @@ const updateImage = (saveCrop = false) => {
       if (!myAPI.checkFileExists(imagePath)) {
       }
 
-      if (cropper !== null) {
-        if (saveCrop) {
-          const cropData = cropper.getValue();
-
-          const imageHeight = image.naturalHeight;
-          const imageWidth = image.naturalWidth;
-          if (
-            imageHeight !== cropData.height ||
-            imageWidth !== cropData.width
-          ) {
-            console.log("crop data changed");
-
-            myAPI.saveCrop(
-              imgDir, csvData[currentImageIndex - 1].image,
-              cropData
-            );
-          }
-        }
-        cropper.destroy();
-      }
-      myAPI.clearCache();
-
       image.src = imagePath;
-
-      imageCaption.textContent = csvData[currentImageIndex].image;
-      cropper = new Croppr(image, {});
-      inputField.value = csvData[currentImageIndex].text;
-      toggleNepaliSwitch.checked = csvData[currentImageIndex].isNepali;
-      nepaliMode = csvData[currentImageIndex].isNepali;
+      let text = csvData[currentImageIndex].text ?? ""
+      if (text == null) {
+        text = ""
+      }
+      // text = String(text);
+      console.log(typeof text);
+      imageCaption.textContent = formId + "/" + csvData[currentImageIndex].image;
+      inputField.value = text.trim();
+      isInvalidCheckbox.checked = csvData[currentImageIndex].isInvalid;
+      currentIndex.innerHTML = currentImageIndex +1;
 
       window.myAPI.saveCSV(pathToCsv, csvData);
 
@@ -76,7 +60,9 @@ const updateImage = (saveCrop = false) => {
 const updateRow = () => {
   if (csvData !== null) {
     const text = inputField.value;
-    csvData[currentImageIndex].text = text.trim();
+    csvData[currentImageIndex].text =  String(text.trim())  ;
+    csvData[currentImageIndex].isNepali = nepaliMode;
+    csvData[currentImageIndex].isInvalid = isInvalidCheckbox.checked;
   }
 };
 
@@ -162,30 +148,21 @@ selectFolderButton.addEventListener("click", async (e) => {
   console.log("selectFolderButton clicked");
   window.myAPI
     .selectFolder()
-    .then(({ folderPath, folderName, imageList, csvPath }) => {
-
+    .then(({ folderPath, folderName, imageList, loadedCSVData, csvPath }) => {
       imgDir = folderPath;
-      pathToCsv = csvPath
-
       images = imageList;
-      folderNameSpan.textContent =' Folder: ' + folderName;
+      pathToCsv = csvPath;
+      formId = folderName;
 
-      d3.csv(pathToCsv)
-        .then((csv) => {
-          console.log("csv found");
-          csvData = csv;
-          updateImage();
-        })
-        .catch((err) => {
-          console.log("csv not found");
-          csvData = [];
-          images.forEach((image) => {
-            csvData.push({ image: image, text: "", isNepali: false });
-          });
-          updateImage();
-        });
+      folderNameSpan.textContent =' Folder: ' + folderName;
+      currentImageIndex = 0;
+      csvData = loadedCSVData;
+
+      updateImage();
+      imageContainer.style.minHeight = "90px";
     })
     .catch((err) => {
+      console.log(err);
       console.log("folder not selected");
     });
 });
@@ -202,7 +179,7 @@ nextButton.addEventListener("click", async (e) => {
   if (currentImageIndex < csvData.length - 1) {
     updateRow();
     currentImageIndex++;
-    updateImage((saveCrop = true));
+    updateImage();
   }
 });
 

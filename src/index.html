@@ -4,25 +4,29 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="stylesheet" href="index.css">
-  <script src="dnm-croppr.js"></script>
-  <link rel="stylesheet" href="dnm-croppr.css">
 </head>
 
 <body>
   <div class="header-container">
     <span class="folder-name">Folder: </span>
+    <div class="index-container">
+      <span>Current Index: </span>
+      <span id="current-index">0</span>
+    </div>
     <button id="selectFolderButton">Select folder</button>
   </div>
   <div id="imageViewer">
     <div class="image-container">
       <img id="image" src="">
-      <span id="image-caption"></span>
     </div>
+    <span id="image-caption"></span>
+
+
     <div class="buttons">
 
       <button id="prevButton">Prev</button>
       <button id="nextButton">Next</button>
-      <button id="deleteButton">Delete</button>
+      <button id="deleteButton" style="display: none;">Delete</button>
       <div class="lang-toggle">
         <span class="lang-title">Eng</span>
         <label class="switch">
@@ -32,16 +36,19 @@
         <span class="lang-title">Nep</span>
       </div>
     </div>
+    <div class="invalid-image">
+      <input type="checkbox" name="invalid" id="invalid-image">
+      <label for="invalid-image">Invalid Image</label>
+    </div>
   </div>
-  <textarea id="transliterateTextarea" style="width:600px;height:200px"></textarea>
+  <input id="transliterateTextarea" type="text" class="input-text">
   <div id="suggestions"></div>
-  <div class="current-index"></div>
+  <div id="special-characters"></div>
   <p>Note : Press SpaceBar after typing one word for English to Nepali Translation. If translation
     is wrong click the word to select from list of Suggestions.</p>
   <button id="saveButton">Save</button>
-  <script src="https://cdn.jsdelivr.net/npm/danfojs@1.1.2/lib/bundle.min.js"></script>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="index.js"> </script>
+  <script src="specialCharacters.js"> </script>
 </body>
 
 </html>
