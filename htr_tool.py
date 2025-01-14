@@ -14,8 +14,8 @@ SELECTED_PDF = st.session_state.get("selected_pdf", None)
 # SELECTED_PAGE = st.session_state.get("selected_page", 0)
 
 
-DATASET_DIR = "/mnt/gime-extract/ime-kyc/dataset/data_annotation/reecha/data/2025-01-10-corporate"
-# DATASET_DIR = "/mnt/gime-extract/ime-kyc/dataset/data_annotation/manil/data/2024-12-26-ocr-annotaion"
+DATASET_DIR = "path/to/data_folder"
+
 specialCharacterArray = [
     "श", "ष", "स", "व",
     "त", "ट", "ठ", "द",
